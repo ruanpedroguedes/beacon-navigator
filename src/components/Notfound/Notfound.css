@@ -1,0 +1,38 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    width: 100vw; 
+    background-color: #000; 
+    color: #fff; 
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7); 
+    margin: 0; 
+    padding: 0; 
+    position: relative; 
+}
+
+.not-found h1 {
+    font-size: 6rem;
+    margin: 0;
+    letter-spacing: 2px; 
+    transition: transform 0.3s; 
+}
+
+.not-found h1:hover {
+    transform: scale(1.1); 
+}
+
+.not-found p {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    opacity: 0.9; 
+}
+
+img{
+    height: 100px;
+    width: 100px;
+    margin-top: 20px;
+}
