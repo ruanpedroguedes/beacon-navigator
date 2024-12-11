@@ -1,7 +1,9 @@
+// FormCadastro.js
+
 import React, { useState } from 'react';
 import './FormCadastro.css';
 import './Input.css';
-import logo from '../../assets/cadastro.png';
+import axios from 'axios'; // Para enviar requisições HTTP
 
 const FormCadastro = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +18,16 @@ const FormCadastro = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Adicione a lógica para enviar os dados do formulário
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+      alert(response.data.message); // Exibe a mensagem do servidor após cadastro
+    } catch (error) {
+      console.error("Erro no cadastro", error);
+      alert('Erro ao cadastrar usuário');
+    }
   };
 
   return (
@@ -33,7 +42,7 @@ const FormCadastro = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="form-fields">
-          <div className='input-group'>
+          <div className="input-group">
             <label>Nome Completo</label>
             <input 
               type="text" 
