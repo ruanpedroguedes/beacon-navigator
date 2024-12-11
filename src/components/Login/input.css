@@ -1,0 +1,29 @@
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  
+  .input-group label {
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+  }
+  
+  .input-group input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 427px;
+    height: 33.27px;
+    border-radius: 99px;
+    border: 1px solid black;
+    font-family: "Poppins", sans-serif;
+    background-color: #E2E2E2;
+  }
+
+  input::placeholder{
+    font-family: "Poppins", sans-serif;
+    font-style: italic;
+    color: #9CA3AF;
+  }
+  
