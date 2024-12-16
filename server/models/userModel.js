@@ -1,4 +1,3 @@
-// server/models/userModel.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -18,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   tipo: {
     type: String,
-    enum: ['admin', 'usuario'],
+    enum: ['admin', 'usuario', 'professor'], // Adicionando 'professor' como tipo de usuário
     default: 'usuario',
   },
 });

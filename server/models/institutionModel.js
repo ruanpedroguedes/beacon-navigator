@@ -1,20 +1,18 @@
 const mongoose = require('mongoose');
 
-const institutionSchema = new mongoose.Schema({
-  nome: {
-    type: String,
+const favoriteSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
-  endereco: {
-    type: String,
-    required: true, // Endereço da instituição
-  },
-  beacons: [{
+  beacon: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Beacon', // Array de beacons associados à instituição
-  }],
+    ref: 'Beacon',
+    required: true,
+  },
 });
 
-const Institution = mongoose.model('Institution', institutionSchema);
+const Favorite = mongoose.model('Favorite', favoriteSchema);
 
-module.exports = Institution;
+module.exports = Favorite;
