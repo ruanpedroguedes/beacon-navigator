@@ -1,50 +1,57 @@
-// FormLogin.js
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import './Input.css';
-import axios from 'axios'; // Para enviar requisições HTTP
-import { useNavigate } from 'react-router-dom'; // Para redirecionamento de rotas
 
 const FormLogin = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    senha: "",
-  });
-  const navigate = useNavigate(); // Para redirecionamento baseado no tipo de usuário
+  const [formData, setFormData] = useState({ email: '', senha: '' });
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrorMessage(''); // Limpa mensagem de erro ao digitar
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validação básica
+    if (!formData.email || !formData.senha) {
+      setErrorMessage('Por favor, preencha todos os campos.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      const { token, tipo } = response.data;
+      // Simulando uma requisição para o backend
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.senha }),
+      });
 
-      localStorage.setItem('token', token); // Armazenar o token no localStorage
+      const data = await response.json();
 
-      // Redireciona para a tela de acordo com o tipo de usuário
-      if (tipo === 'admin') {
-        navigate('/admin'); // Redireciona para a tela de Admin
+      if (response.ok) {
+        // Redireciona com base no tipo de usuário
+        if (data.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (data.role === 'teacher') {
+          navigate('/teacher-dashboard');
+        } else {
+          navigate('/student-dashboard');
+        }
       } else {
-        navigate('/usuario'); // Redireciona para a tela de Usuário
+        setErrorMessage(data.message || 'Erro ao fazer login. Verifique suas credenciais.');
       }
     } catch (error) {
-      console.error("Erro no login", error);
-      alert('Erro ao fazer login');
+      console.error('Erro ao conectar com o servidor:', error);
+      setErrorMessage('Erro ao conectar ao servidor.');
     }
   };
 
   return (
     <div className="form-wrapper">
-      <div className="form-image">
-         {/* <img src={'#'} alt="Cadastro" /> */}
-      </div>
-
       <div className="form-container">
         <div className="form-header">
           <h1>Entrar</h1>
@@ -53,23 +60,27 @@ const FormLogin = () => {
         <form onSubmit={handleSubmit} className="form-fields">
           <div className="input-group">
             <label>Email</label>
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Insira seu email" 
-              value={formData.email} 
-              onChange={handleChange} 
+            <input
+              type="email"
+              name="email"
+              placeholder="Insira seu email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
-            
+
             <label>Senha</label>
-            <input 
-              type="password" 
-              name="senha" 
-              placeholder="Digite sua senha" 
-              value={formData.senha} 
-              onChange={handleChange} 
+            <input
+              type="password"
+              name="senha"
+              placeholder="Digite sua senha"
+              value={formData.senha}
+              onChange={handleChange}
+              required
             />
           </div>
+
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <button type="submit" className="form-button">
             Entrar
@@ -78,7 +89,7 @@ const FormLogin = () => {
 
         <div className="form-footer">
           <p>
-            Não possui uma conta? 
+            Não possui uma conta?
             <span className="cadastro-link">
               <a href="/cadastro"> Cadastre-se</a>
             </span>

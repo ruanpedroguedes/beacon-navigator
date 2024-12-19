@@ -1,41 +1,74 @@
-// FormCadastro.js
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './FormCadastro.css';
-import './Input.css';
-import axios from 'axios'; // Para enviar requisições HTTP
+
 
 const FormCadastro = () => {
   const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    confirmarSenha: "",
+    nome: '',
+    email: '',
+    senha: '',
+    confirmarSenha: '',
+    role: 'student', // Por padrão, o tipo de usuário será Aluno
+    isPCD: false,
+    pcdDetails: '',
   });
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+    setErrorMessage(''); // Limpa mensagens de erro
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validação básica
+    if (!formData.nome || !formData.email || !formData.senha || !formData.confirmarSenha) {
+      setErrorMessage('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+    if (formData.senha !== formData.confirmarSenha) {
+      setErrorMessage('As senhas não coincidem.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-      alert(response.data.message); // Exibe a mensagem do servidor após cadastro
+      // Simula envio para o backend
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Cadastro realizado com sucesso!');
+        // Redireciona com base no tipo de usuário cadastrado
+        if (formData.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (formData.role === 'teacher') {
+          navigate('/teacher-dashboard');
+        } else {
+          navigate('/student-dashboard');
+        }
+      } else {
+        setErrorMessage(data.message || 'Erro ao realizar cadastro.');
+      }
     } catch (error) {
-      console.error("Erro no cadastro", error);
-      alert('Erro ao cadastrar usuário');
+      console.error('Erro ao conectar ao servidor:', error);
+      setErrorMessage('Erro ao conectar ao servidor.');
     }
   };
 
   return (
     <div className="form-wrapper">
-      <div className="form-image">
-         {/* <img src={'#'} alt="Cadastro" /> */}
-      </div>
-
       <div className="form-container">
         <div className="form-header">
           <h1>Cadastre-se</h1>
@@ -44,43 +77,77 @@ const FormCadastro = () => {
         <form onSubmit={handleSubmit} className="form-fields">
           <div className="input-group">
             <label>Nome Completo</label>
-            <input 
-              type="text" 
-              name="nome" 
-              placeholder="Insira seu nome completo" 
-              value={formData.nome} 
-              onChange={handleChange} 
+            <input
+              type="text"
+              name="nome"
+              placeholder="Insira seu nome completo"
+              value={formData.nome}
+              onChange={handleChange}
+              required
             />
 
             <label>Email</label>
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Insira seu email" 
-              value={formData.email} 
-              onChange={handleChange} 
+            <input
+              type="email"
+              name="email"
+              placeholder="Insira seu email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
-            
+
             <label>Senha</label>
-            <input 
-              type="password" 
-              name="senha" 
-              placeholder="Digite sua senha" 
-              value={formData.senha} 
-              onChange={handleChange} 
+            <input
+              type="password"
+              name="senha"
+              placeholder="Digite sua senha"
+              value={formData.senha}
+              onChange={handleChange}
+              required
             />
-            
-            <p>A senha deve conter pelo menos 8 caracteres, incluindo um número e uma letra minúscula.</p>
-            
+
             <label>Confirmar Senha</label>
-            <input 
-              type="password" 
-              name="confirmarSenha" 
-              placeholder="Confirme sua senha" 
-              value={formData.confirmarSenha} 
-              onChange={handleChange} 
+            <input
+              type="password"
+              name="confirmarSenha"
+              placeholder="Confirme sua senha"
+              value={formData.confirmarSenha}
+              onChange={handleChange}
+              required
             />
+
+            <label>Tipo de Usuário</label>
+            <select name="role" value={formData.role} onChange={handleChange}>
+              <option value="student">Aluno</option>
+              <option value="teacher">Professor</option>
+              <option value="admin">Administrador</option>
+            </select>
+
+            <label>
+              <input
+                type="checkbox"
+                name="isPCD"
+                checked={formData.isPCD}
+                onChange={handleChange}
+              />
+              Sou PCD (Pessoa com Deficiência)
+            </label>
+
+            {formData.isPCD && (
+              <>
+                <label>Detalhes da Deficiência</label>
+                <input
+                  type="text"
+                  name="pcdDetails"
+                  placeholder="Descreva sua deficiência"
+                  value={formData.pcdDetails}
+                  onChange={handleChange}
+                />
+              </>
+            )}
           </div>
+
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <button type="submit" className="form-button">
             Cadastrar
@@ -88,7 +155,12 @@ const FormCadastro = () => {
         </form>
 
         <div className="form-footer">
-          <p><a href="/login">Login</a></p>
+          <p>
+            Já possui uma conta?
+            <span className="login-link">
+              <a href="/login"> Faça Login</a>
+            </span>
+          </p>
         </div>
       </div>
     </div>
