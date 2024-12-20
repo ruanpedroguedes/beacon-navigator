@@ -175,94 +175,61 @@ input::placeholder {
   }
 }
 
-.form-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
+/* Estilização específica para o campo select */
+select {
+  width: 85%;
+  height: 50px;
+  padding: 0.5rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 99px;
+  background-color: #E2E2E2;
+  color: #131315;
 }
 
-.form-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
+
+
+/* Estilização específica para checkbox */
+label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  accent-color: rgba(255, 0, 0, 0.76);
 }
 
-.form-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.form-header h1 {
-  font-size: 2rem;
-  color: #333;
-}
-
-.form-fields {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group {
-  margin-bottom: 1rem;
-}
-
-.input-group label {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #555;
-}
-
-.input-group input, .input-group select {
-  padding: 0.7rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-}
-
-.input-group input:focus, .input-group select:focus {
-  border-color: #4caf50;
-  outline: none;
-}
-
-.form-button {
-  margin-top: 20px;
-  padding: 0.7rem;
-  font-size: 1rem;
-  background-color: #4caf50;
+label {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
 }
 
-.form-button:hover {
-  background-color: #45a049;
+/* Estilização específica para detalhes da deficiência */
+input[name="pcdDetails"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid black;
+  border-radius: 99px;
+  background-color: #E2E2E2;
+  font-family: "Poppins", sans-serif;
+  color: #131315;
 }
 
-.error-message {
-  color: red;
-  margin-top: 10px;
-  text-align: center;
-  font-size: 0.9rem;
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+  select {
+    font-size: 14px;
+  }
 }
 
-.form-footer {
-  text-align: center;
-  margin-top: 1rem;
+@media (max-width: 480px) {
+  select {
+    font-size: 13px;
+  }
 }
 
-.login-link a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
+@media (max-width: 360px) {
+  select {
+    font-size: 12px;
+  }
 }

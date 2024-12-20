@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FormCadastro.css';
+import './Input.css';
 
 
 const FormCadastro = () => {
@@ -122,7 +123,7 @@ const FormCadastro = () => {
               <option value="teacher">Professor</option>
               <option value="admin">Administrador</option>
             </select>
-
+            
             <label>
               <input
                 type="checkbox"
