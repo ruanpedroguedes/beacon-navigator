@@ -40,6 +40,7 @@ const FormCadastro = () => {
     }
 
     try {
+      console.log(formData)
       // Simula envio para o backend
       const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
