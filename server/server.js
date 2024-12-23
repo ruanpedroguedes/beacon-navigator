@@ -51,41 +51,11 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
+
+
 // Rotas de autenticação
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
-// Usuários predefinidos
-const User = require('./models/userModel'); // Certifique-se de que o modelo User está configurado corretamente
 
-const seedUsers = async () => {
-  try {
-    const existingAdmin = await User.findOne({ email: 'admin@example.com' });
-    if (!existingAdmin) {
-      await User.create({
-        name: 'Administrador',
-        email: 'admin@example.com',
-        password: 'admin123', // Hash a senha em produção
-        role: 'admin',
-        isPCD: false,
-      });
-      console.log('Usuário Administrador criado.');
-    }
 
-    const existingTeacher = await User.findOne({ email: 'professor@example.com' });
-    if (!existingTeacher) {
-      await User.create({
-        name: 'Professor',
-        email: 'professor@example.com',
-        password: 'prof123', // Hash a senha em produção
-        role: 'teacher',
-        isPCD: false,
-      });
-      console.log('Usuário Professor criado.');
-    }
-  } catch (error) {
-    console.error('Erro ao criar usuários predefinidos:', error);
-  }
-};
-
-seedUsers();

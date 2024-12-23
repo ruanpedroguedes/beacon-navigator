@@ -28,7 +28,7 @@ const FormLogin = () => {
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.senha }),
+        body: JSON.stringify({ email: formData.email, senha: formData.senha }),
       });
 
       const data = await response.json();
