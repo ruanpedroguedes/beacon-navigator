@@ -39,11 +39,11 @@ const FormLogin = () => {
 
         // Redireciona com base no tipo de usuário
         if (role === 'admin') {
-          navigate('/admin');
+          navigate('/admin/dashboard');
         } else if (role === 'teacher') {
-          navigate('/teacher');
+          navigate('/teacher/dashboard');
         } else {
-          navigate('/student');
+          navigate('/student/dashboard');
         }
       } else {
         setErrorMessage(data.message || 'Erro ao fazer login. Verifique suas credenciais.');
