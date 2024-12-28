@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import './FormCadastro.css';
 import './Input.css';
 
-
 const FormCadastro = () => {
   const [formData, setFormData] = useState({
     nome: '',
@@ -40,7 +39,7 @@ const FormCadastro = () => {
     }
 
     try {
-      console.log(formData)
+      console.log(formData);
       // Simula envio para o backend
       const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
@@ -52,14 +51,7 @@ const FormCadastro = () => {
 
       if (response.ok) {
         alert('Cadastro realizado com sucesso!');
-        // Redireciona com base no tipo de usuário cadastrado
-        if (formData.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (formData.role === 'teacher') {
-          navigate('/teacher-dashboard');
-        } else {
-          navigate('/student-dashboard');
-        }
+        navigate('/login'); // Redireciona para a página de login após o cadastro
       } else {
         setErrorMessage(data.message || 'Erro ao realizar cadastro.');
       }

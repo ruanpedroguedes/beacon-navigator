@@ -34,13 +34,16 @@ const FormLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
+        const { token, role } = data;
+        localStorage.setItem('token', token); // Armazena o token
+
         // Redireciona com base no tipo de usuário
-        if (data.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (data.role === 'teacher') {
-          navigate('/teacher-dashboard');
+        if (role === 'admin') {
+          navigate('/admin');
+        } else if (role === 'teacher') {
+          navigate('/teacher');
         } else {
-          navigate('/student-dashboard');
+          navigate('/student');
         }
       } else {
         setErrorMessage(data.message || 'Erro ao fazer login. Verifique suas credenciais.');
