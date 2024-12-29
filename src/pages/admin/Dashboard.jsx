@@ -1,11 +1,18 @@
 import React from 'react';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import CriarTurma from '../../components/CriarTurma/CriarTurma'
 
 const AdminDashboard = () => {
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <p>Bem-vindo ao painel de administração.</p>
-    </div>
+    <>
+    <Header/>
+    <main>
+      <h1>Turmas</h1>
+      <CriarTurma/>
+    </main>
+    <Footer/>
+    </>
   );
 };
 
