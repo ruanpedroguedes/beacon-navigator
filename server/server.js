@@ -60,5 +60,8 @@ app.use('/api/auth', authRoutes);
 const classRoutes = require('./routes/classRoutes');
 app.use('/api/classes', classRoutes);
 
+const userRoutes = require('./routes/userRoutes'); 
+app.use('/api/users', userRoutes);
+
 
 

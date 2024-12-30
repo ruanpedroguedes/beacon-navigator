@@ -1,0 +1,59 @@
+.adicionar-membro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.adicionar-membro-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+}
+
+.adicionar-membro-form input,
+.adicionar-membro-form select,
+.adicionar-membro-form button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.adicionar-membro-form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.adicionar-membro-form button:hover {
+  background-color: #45a049;
+}
+
+.close-button {
+  background-color: white;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 10px;
+  height: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  top: -39px; /* Ajuste a posição para fora do formulário */
+  right: -1px; /* Ajuste a posição para fora do formulário */
+}
