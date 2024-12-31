@@ -1,3 +1,6 @@
+body{
+  font-family: "Poppins", sans-serif;
+}
 .adicionar-membro-container {
   display: flex;
   flex-direction: column;
@@ -31,15 +34,16 @@
 }
 
 .adicionar-membro-form button {
-  background-color: #4CAF50;
+  background-color: #DA1010;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 15px;
 }
 
 .adicionar-membro-form button:hover {
-  background-color: #45a049;
+  background-color: #ee2222fd;
 }
 
 .close-button {
@@ -56,4 +60,26 @@
   position: absolute;
   top: -39px; /* Ajuste a posição para fora do formulário */
   right: -1px; /* Ajuste a posição para fora do formulário */
+}
+
+#btnmembro{
+  background-color: #DA1010;
+  border: none;
+  color: white;
+  font-size: 28px;
+  border-radius: 50%;
+  width: 50px;
+  height: 47px;
+}
+
+button.close-button {
+  background-color: rgba(255, 255, 255, 0); /* branco com opacidade 0 */
+  color: #DA1010;
+  font-size: 30px;
+}
+
+button.close-button:hover {
+  background-color: rgba(255, 255, 255, 0); /* branco com opacidade 0 */
+  color: #DA1010;
+  font-size: 30px;
 }

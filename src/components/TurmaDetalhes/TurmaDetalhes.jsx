@@ -32,19 +32,30 @@ const TurmaDetalhes = () => {
     <div className="turma-detalhes-container">
       <h1>{classDetails.name}</h1>
       <AdicionarMembro classId={id} onMemberAdded={handleMemberAdded} />
+
       <h2>Professor</h2>
-      {classDetails.teacher ? (
-        <p key={classDetails.teacher._id}>{classDetails.teacher.nome}</p>
+    {classDetails.teacher ? (
+      <div key={classDetails.teacher._id} className="card">
+        <div className="card-info">
+          <span className="card-name">{classDetails.teacher.nome}</span>
+          <span className="card-email">{classDetails.teacher.email}</span>
+        </div>
+      </div>
       ) : (
         <p>Não tem professor aqui</p>
       )}
-      <h2>Alunos</h2>
-      {classDetails.students.length > 0 ? (
-        <ul>
-          {classDetails.students.map((student) => (
-            <li key={student._id}>{student.nome}</li>
-          ))}
-        </ul>
+       <h2>Alunos</h2>
+    {classDetails.students.length > 0 ? (
+      <ul className="students-list">
+        {classDetails.students.map((student) => (
+          <li key={student._id} className="card">
+            <div className="card-info">
+              <span className="card-name">{student.nome}</span>
+              <span className="card-email">{student.email}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
       ) : (
         <p>Não tem alunos aqui</p>
       )}

@@ -95,8 +95,8 @@ div.form-container {
   padding: 0.5rem;
   border: 1px solid black;
   border-radius: 99px;
-  width: 427px;
-  height: 33.27px;
+  width: 100%;
+  height: 40px;
   font-family: "Poppins", sans-serif;
   background-color: #E2E2E2;
 }
@@ -124,7 +124,7 @@ input::placeholder {
   }
 
   .form-header h1 {
-    font-size: 35px;
+    font-size: 30px;
   }
 
   .form-footer {
@@ -145,7 +145,7 @@ input::placeholder {
 
   .input-group input {
     width: 100%;
-    height: 40px;
+    height: 35px;
   }
 
   .form-footer {
@@ -166,7 +166,7 @@ input::placeholder {
 
   .input-group input {
     width: 100%;
-    height: 35px;
+    height: 30px;
   }
 
   .form-footer {
@@ -186,3 +186,4 @@ input::placeholder {
 h1 {
   color: white;
 }
+

@@ -50,7 +50,7 @@ const AdicionarMembro = ({ classId, onMemberAdded }) => {
 
   return (
     <div className="adicionar-membro-container">
-      <button onClick={() => setShowForm(true)}>Adicionar Membro</button>
+      <button id='btnmembro' onClick={() => setShowForm(true)}>+</button>
       {showForm && (
         <div className="adicionar-membro-form">
           <button className="close-button" onClick={() => setShowForm(false)}>X</button>

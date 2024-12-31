@@ -1,9 +1,10 @@
 .header {
   display: flex;
   align-items: center;
-  background-color: #121212; /* Fundo preto */
+  background-color: #131315; /* Fundo preto */
   padding: 10px;
   color: white;
+  margin-bottom: 30px;
 }
 
 .header__profile .profile__icon {

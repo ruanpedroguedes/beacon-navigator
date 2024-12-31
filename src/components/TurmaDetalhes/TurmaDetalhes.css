@@ -1,0 +1,72 @@
+.turma-detalhes-container{
+    background-color:  #131315; 
+    width: 400px; 
+    height: 750px;    
+}
+
+/* Estilização geral */
+.turma-detalhes-container {
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  color: #333;
+}
+
+/* Títulos */
+.turma-detalhes-container h1,
+.turma-detalhes-container h2 {
+  margin-bottom: 15px;
+}
+
+/* Estilização dos cards */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5; /* Cor de fundo do card */
+  border-right: 24px solid #DA1010; /* Borda vermelha à esquerda */
+  padding: 10px;
+  border-radius: 15px;
+  width: 316px;
+  height: 62px;
+  margin-bottom: 10px; /* Espaçamento entre os cards */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+/* Informações dentro dos cards */
+.card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nome destacado */
+.card-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  font-size: 15px;
+}
+
+/* Email */
+.card-email {
+  font-size: 14px;
+  color: black;
+  font-size: 15px;
+}
+
+/* Lista de alunos */
+.students-list {
+  list-style: none; /* Remove os marcadores */
+  padding: 0;
+  margin: 0;
+}
+
+h2{
+ color: #f5f5f5;
+ font-family: Poppins;
+ font-size: 20px;
+ font-weight: 500;
+ line-height: 30px;
+ text-align: left;
+ text-underline-position: from-font;
+ text-decoration-skip-ink: none;
+}
