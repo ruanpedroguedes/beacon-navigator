@@ -17,14 +17,12 @@ const FormLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação básica
     if (!formData.email || !formData.senha) {
       setErrorMessage('Por favor, preencha todos os campos.');
       return;
     }
 
     try {
-      // Simulando uma requisição para o backend
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -35,22 +33,37 @@ const FormLogin = () => {
 
       if (response.ok) {
         const { token, role } = data;
-        localStorage.setItem('token', token); // Armazena o token
 
-        // Redireciona com base no tipo de usuário
-        if (role === 'admin') {
-          navigate('/admin/dashboard');
-        } else if (role === 'teacher') {
-          navigate('/teacher/dashboard');
-        } else {
-          navigate('/student/dashboard');
+        if (!token || !role) {
+          setErrorMessage('Resposta inválida do servidor. Contate o suporte.');
+          return;
+        }
+
+        // Armazena o token no localStorage
+        localStorage.setItem('token', token);
+
+        // Verifica e redireciona o usuário com base na role
+        switch (role) {
+          case 'admin':
+            navigate('/admin/dashboard');
+            break;
+          case 'teacher':
+            navigate('/teacher/dashboard');
+            break;
+          case 'student':
+            navigate('/student/dashboard');
+            break;
+          default:
+            setErrorMessage('Role inválida recebida. Contate o suporte.');
+            return;
         }
       } else {
+        // Exibe mensagem de erro vinda do servidor
         setErrorMessage(data.message || 'Erro ao fazer login. Verifique suas credenciais.');
       }
     } catch (error) {
       console.error('Erro ao conectar com o servidor:', error);
-      setErrorMessage('Erro ao conectar ao servidor.');
+      setErrorMessage('Erro ao conectar ao servidor. Tente novamente mais tarde.');
     }
   };
 

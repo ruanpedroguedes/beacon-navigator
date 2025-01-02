@@ -1,11 +1,17 @@
 import React from 'react';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import TeacherClasses from '../../components/TeacherClasses/TeacherClasses';
 
 const TeacherDashboard = () => {
   return (
-    <div>
-      <h1>Teacher Dashboard</h1>
-      <p>Bem-vindo ao painel do professor.</p>
-    </div>
+   <>
+   <Header/>
+   <main>
+    <TeacherClasses/>
+   </main>
+   <Footer/>
+   </>
   );
 };
 
