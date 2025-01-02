@@ -60,3 +60,13 @@ exports.addMemberToClass = async (req, res) => {
     res.status(400).json({ message: 'Erro ao adicionar membro à turma', error: error.message });
   }
 };
+
+exports.getClassesByTeacher = async (req, res) => {
+  try {
+    const teacherId = req.user.id; // Certifique-se de que o ID do professor está disponível no `req.user`.
+    const classes = await Class.find({ teacher: teacherId });
+    res.status(200).json(classes);
+  } catch (error) {
+    res.status(400).json({ message: 'Erro ao buscar turmas do professor', error: error.message });
+  }
+};
