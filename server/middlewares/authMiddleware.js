@@ -17,6 +17,7 @@ const authMiddleware = (roles = []) => {
       }
 
       console.log('Usuário autenticado:', req.user);
+      
       next();
     } catch (error) {
       console.error('Erro ao verificar token:', error.message);

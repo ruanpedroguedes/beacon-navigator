@@ -1,5 +1,7 @@
 const Class = require('../models/classModel');
 const User = require('../models/userModel');
+const mongoose = require('mongoose')
+
 
 exports.createClass = async (req, res) => {
   const { name, description } = req.body;

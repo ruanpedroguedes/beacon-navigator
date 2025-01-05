@@ -5,9 +5,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 router.post('/', classController.createClass);
 router.get('/', classController.getClasses);
-router.get('/:id', classController.getClassById);
 router.post('/add-member', classController.addMemberToClass);
 router.get('/teacher-classes', authMiddleware(['teacher']), classController.getClassesByTeacher);
+router.get('/:id', classController.getClassById);
 
 
 module.exports = router;

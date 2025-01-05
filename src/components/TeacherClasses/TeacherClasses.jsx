@@ -27,12 +27,13 @@ const TeacherClasses = () => {
         });
     
         console.log('Resposta da requisição:', response); // Log da resposta completa
-    
+        const data = await response.json();
+        console.log(data)
         if (!response.ok) {
           throw new Error(`Erro ao buscar turmas: ${response.statusText}`);
         }
     
-        const data = await response.json();
+        
         setClasses(data);
       } catch (err) {
         console.error('Erro ao buscar turmas:', err.message);
