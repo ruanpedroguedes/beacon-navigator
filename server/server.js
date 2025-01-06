@@ -63,5 +63,6 @@ app.use('/api/classes', classRoutes);
 const userRoutes = require('./routes/userRoutes'); 
 app.use('/api/users', userRoutes);
 
-
+const avisosRoutes = require('./routes/avisosRoutes');
+app.use('/api/avisos', avisosRoutes);
 

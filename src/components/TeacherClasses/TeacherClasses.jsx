@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './TeacherClasses.css';
 import useAuth from '../../hooks/useAuth';
 
 const TeacherClasses = () => {
@@ -6,6 +8,7 @@ const TeacherClasses = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -28,12 +31,11 @@ const TeacherClasses = () => {
     
         console.log('Resposta da requisição:', response); // Log da resposta completa
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (!response.ok) {
           throw new Error(`Erro ao buscar turmas: ${response.statusText}`);
         }
     
-        
         setClasses(data);
       } catch (err) {
         console.error('Erro ao buscar turmas:', err.message);
@@ -43,9 +45,12 @@ const TeacherClasses = () => {
       }
     };
     
-
     fetchClasses();
   }, [token]);
+
+  const handleDoubleClick = (classId) => {
+    navigate(`/teacher/avisos/${classId}`);
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -61,14 +66,18 @@ const TeacherClasses = () => {
       {classes.length === 0 ? (
         <p>Você ainda não está vinculado a nenhuma turma.</p>
       ) : (
-        <ul>
+        <div id="turmas">
           {classes.map((classItem) => (
-            <li key={classItem._id}>
+            <div
+              key={classItem._id}
+              className="class-item"
+              onDoubleClick={() => handleDoubleClick(classItem._id)}
+            >
               <h3>{classItem.name}</h3>
               <p>{classItem.description}</p>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

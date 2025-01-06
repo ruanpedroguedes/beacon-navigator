@@ -1,0 +1,18 @@
+#turmas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 500px; /* Define a altura máxima do contêiner */
+  overflow-y: auto; /* Adiciona a barra de rolagem vertical */
+  padding-right: 16px; /* Adiciona espaço para evitar sobreposição da barra de rolagem */
+}
+
+.class-item {
+  background-color: #FFFFFF;
+  padding-left: 10px;
+  border-radius: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 316px; /* Garantir que cada turma ocupe 100% da largura do contêiner */
+  height: 93px;
+  box-sizing: border-box;
+}
