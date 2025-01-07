@@ -9,7 +9,18 @@
   gap: 16px;
   max-height: 100%; /* Define a altura máxima do contêiner */
   max-width: 100%;
-  
+  font-family: Poppins;
+}
+
+.aviso-item p{
+  color: black;
+}
+
+
+.aviso-item:hover{
+  background-color: #DA1010;
+  color: #fff;
+  border: 1px solid  #DA1010;
 }
 
 /* Estilos para o formulário sobreposto */
@@ -23,24 +34,26 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  
+  font-family: Poppins;
 }
 
 .form-overlay input,
 .form-overlay textarea,
 .form-overlay button {
   display: block;
-  width: 200px;
+  width: 300px;
   margin-bottom: 10px;
   padding: 10px;
   font-size: 16px;
+  font-family: Poppins;
 }
 
 .form-overlay button {
-  background-color: #4CAF50;
+  background-color: #DA1010;
   color: white;
   border: none;
   cursor: pointer;
+  font-family: Poppins;
 }
 
 .form-overlay button:hover {
@@ -56,4 +69,14 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
+}
+
+#addAvisos{
+  background-color: #DA1010;
+  border-radius: 50%;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 20px;
+  cursor: pointer;
 }

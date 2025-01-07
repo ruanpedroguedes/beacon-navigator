@@ -1,12 +1,18 @@
 import React from 'react';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import StudentClasses from '../../components/StudentClasses/StudentClasses';
 
-const StudentDashboard = () => {
-  return (
-    <div>
-      <h1>Student Dashboard</h1>
-      <p>Bem-vindo ao painel do aluno.</p>
-    </div>
-  );
-};
-
-export default StudentDashboard;
+const Turmas = () => {
+    return (
+      <>
+      <Header/>
+      <main>
+      <StudentClasses/>
+      </main>
+      <Footer/>
+      </>
+    );
+  };
+  
+  export default Turmas;

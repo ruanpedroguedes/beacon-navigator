@@ -71,10 +71,9 @@ const CriarAvisos = ({ classId }) => {
 
   return (
     <div>
-      <h2>Avisos</h2>
       {loading && <p>Carregando...</p>}
       {error && <p>Erro: {error}</p>}
-      <button onClick={() => setShowForm(true)}>+</button>
+      <button id='addAvisos' onClick={() => setShowForm(true)}>+</button>
       {showForm && (
         <>
           <div className="overlay-background" onClick={() => setShowForm(false)}></div>

@@ -72,3 +72,13 @@ exports.getClassesByTeacher = async (req, res) => {
     res.status(400).json({ message: 'Erro ao buscar turmas do professor', error: error.message });
   }
 };
+
+exports.getClassByStudent = async (req, res) => {
+  try{
+    const studentId = req.user.id
+    const classes = await Class.find({students: studentId})
+    res.status(200).json(classes)
+  } catch (error){
+    res.status(400).json({message: 'Erro ao buscar turmas do aluno', error: error.message})
+  }
+}

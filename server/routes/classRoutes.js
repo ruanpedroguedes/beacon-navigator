@@ -7,6 +7,7 @@ router.post('/', classController.createClass);
 router.get('/', classController.getClasses);
 router.post('/add-member', classController.addMemberToClass);
 router.get('/teacher-classes', authMiddleware(['teacher']), classController.getClassesByTeacher);
+router.get('/student-classes', authMiddleware(['student']), classController.getClassByStudent)
 router.get('/:id', classController.getClassById);
 
 
