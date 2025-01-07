@@ -1,0 +1,57 @@
+/* File: FloorInfo.css */
+
+.floor-container {
+  max-height: 600px; /* Define uma altura máxima */
+  max-width: 400px;
+  overflow-y: auto; /* Adiciona barra de rolagem caso o conteúdo exceda a altura máxima */
+  padding: 15px; /* Ajuste do preenchimento interno para compactar */
+  background-color: #131315;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.title {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.floor-card {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.floor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #DA1010;
+  border: 1px solid #DA1010;
+  color: white; /* Muda a cor do texto do card */
+}
+
+.floor-card:hover .floor-name,
+.floor-card:hover .floor-details li {
+  color: white; /* Muda a cor dos textos internos */
+}
+
+.floor-name {
+  margin: 0;
+  font-size: 1.5rem;
+  color: black;
+}
+
+.floor-details {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.floor-details li {
+  font-size: 1rem;
+  color: black;
+  margin-bottom: 5px;
+}

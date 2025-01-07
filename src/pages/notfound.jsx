@@ -1,4 +1,4 @@
-import Notfound from '../components/Notfound/Notfound';
+import Notfound from '../components/Notfound/Notfound'
 
 export default function Login (){
     return(

@@ -1,18 +1,18 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import StudentClasses from '../../components/StudentClasses/StudentClasses';
+import Location from '../../components/Location/Location';
 
-const Turmas = () => {
+const Localiza = () => {
     return (
       <>
       <Header/>
       <main>
-      <StudentClasses/>
+        <Location/>
       </main>
       <Footer/>
       </>
     );
   };
   
-  export default Turmas;
+  export default Localiza;

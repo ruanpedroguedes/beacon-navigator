@@ -1,5 +1,7 @@
 const Class = require('../models/classModel');
 const User = require('../models/userModel');
+const mongoose = require('mongoose')
+
 
 exports.createClass = async (req, res) => {
   const { name, description } = req.body;
@@ -60,3 +62,23 @@ exports.addMemberToClass = async (req, res) => {
     res.status(400).json({ message: 'Erro ao adicionar membro à turma', error: error.message });
   }
 };
+
+exports.getClassesByTeacher = async (req, res) => {
+  try {
+    const teacherId = req.user.id; // Certifique-se de que o ID do professor está disponível no `req.user`.
+    const classes = await Class.find({ teacher: teacherId });
+    res.status(200).json(classes);
+  } catch (error) {
+    res.status(400).json({ message: 'Erro ao buscar turmas do professor', error: error.message });
+  }
+};
+
+exports.getClassByStudent = async (req, res) => {
+  try{
+    const studentId = req.user.id
+    const classes = await Class.find({students: studentId})
+    res.status(200).json(classes)
+  } catch (error){
+    res.status(400).json({message: 'Erro ao buscar turmas do aluno', error: error.message})
+  }
+}

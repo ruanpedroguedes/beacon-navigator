@@ -1,0 +1,82 @@
+/* Estilos para o componente de avisos */
+.aviso-item {
+  border: 1px solid white;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+  color: black;
+  border-radius: 18px;
+  gap: 16px;
+  max-height: 100%; /* Define a altura máxima do contêiner */
+  max-width: 100%;
+  font-family: Poppins;
+}
+
+.aviso-item p{
+  color: black;
+}
+
+
+.aviso-item:hover{
+  background-color: #DA1010;
+  color: #fff;
+  border: 1px solid  #DA1010;
+}
+
+/* Estilos para o formulário sobreposto */
+.form-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-family: Poppins;
+}
+
+.form-overlay input,
+.form-overlay textarea,
+.form-overlay button {
+  display: block;
+  width: 300px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-family: Poppins;
+}
+
+.form-overlay button {
+  background-color: #DA1010;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: Poppins;
+}
+
+.form-overlay button:hover {
+  background-color: #45a049;
+}
+
+/* Estilos para o fundo escurecido */
+.overlay-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+#addAvisos{
+  background-color: #DA1010;
+  border-radius: 50%;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 20px;
+  cursor: pointer;
+}
