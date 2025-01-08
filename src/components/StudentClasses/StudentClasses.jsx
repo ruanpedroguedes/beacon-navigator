@@ -49,8 +49,9 @@ const StudentClasses = () => {
   }, [token]);
 
   const handleDoubleClick = (classId) => {
-    navigate(`/teacher/avisos/${classId}`);
+    navigate(`/student/turmaavisos/${classId}`);
   };
+  
 
   if (loading) {
     return <p>Carregando...</p>;

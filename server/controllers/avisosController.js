@@ -27,3 +27,4 @@ exports.getAvisosByClass = async (req, res) => {
     res.status(400).json({ message: 'Erro ao buscar avisos', error: error.message });
   }
 };
+

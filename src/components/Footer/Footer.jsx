@@ -18,14 +18,6 @@ const Footer = () => {
         <span>Rotas</span>
       </div>
       <div className="footer__item">
-        <img
-          src={NotificacoesIcon}
-          alt="Notificações"
-          className="footer__icon"
-        />
-        <span>Notificações</span>
-      </div>
-      <div className="footer__item">
         <img src={TurmasIcon} alt="Turmas" className="footer__icon" />
         <span className="footer__item--active">Turmas</span>
       </div>
