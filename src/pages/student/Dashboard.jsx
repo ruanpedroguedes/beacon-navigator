@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import FooterStudent from '../../components/FooterStudent/FooterStudent'
 import StudentClasses from '../../components/StudentClasses/StudentClasses';
 
 const Turmas = () => {
@@ -10,7 +10,7 @@ const Turmas = () => {
       <main>
       <StudentClasses/>
       </main>
-      <Footer/>
+      <FooterStudent/>
       </>
     );
   };

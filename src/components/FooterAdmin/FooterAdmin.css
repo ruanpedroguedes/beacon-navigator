@@ -1,0 +1,29 @@
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color:#131315; /* Fundo preto */
+  padding: 10px 0;
+  color: white;
+}
+
+.footer__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.footer__icon {
+  width: 30px; /* Tamanho dos ícones */
+  height: 30px;
+  margin-bottom: 5px;
+}
+
+.footer__item span {
+  color: white;
+}
+
+.footer__item--active {
+  color: red; /* Texto vermelho para "ativo" */
+}

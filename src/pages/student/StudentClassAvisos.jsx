@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import FooterStudent from '../../components/FooterStudent/FooterStudent'
 import TurmasAvisosContent from '../../components/StudentClassAvisos/StudentClassAvisos'; // Certifique-se de usar o componente correto!
 
 const TurmasAvisos = () => {
@@ -10,7 +10,7 @@ const TurmasAvisos = () => {
       <main>
         <TurmasAvisosContent /> {/* Este deve ser o componente que busca os avisos */}
       </main>
-      <Footer />
+      <FooterStudent/>
     </>
   );
 };

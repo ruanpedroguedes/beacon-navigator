@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import FooterTeacher from '../../components/FooterTeacher/FooterTeacher'
 import TeacherClasses from '../../components/TeacherClasses/TeacherClasses';
 
 const TeacherDashboard = () => {
@@ -10,7 +10,7 @@ const TeacherDashboard = () => {
    <main>
     <TeacherClasses/>
    </main>
-   <Footer/>
+   <FooterTeacher/>
    </>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import FooterAdmin from '../../components/FooterAdmin/FooterAdmin'
 import CriarTurma from '../../components/CriarTurma/CriarTurma'
 
 const AdminDashboard = () => {
@@ -11,7 +11,7 @@ const AdminDashboard = () => {
       <h1>Turmas</h1>
       <CriarTurma/>
     </main>
-    <Footer/>
+    <FooterAdmin/>
     </>
   );
 };

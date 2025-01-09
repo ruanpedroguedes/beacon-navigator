@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import FooterStudent from '../../components/FooterStudent/FooterStudent'
 import Location from '../../components/Location/Location';
 
 const Localiza = () => {
@@ -10,7 +10,7 @@ const Localiza = () => {
       <main>
         <Location/>
       </main>
-      <Footer/>
+      <FooterStudent/>
       </>
     );
   };
