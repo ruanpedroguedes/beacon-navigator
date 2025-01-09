@@ -69,7 +69,7 @@ const StudentClasses = () => {
       ) : (
         <div id="turmas">
           {classes.map((classItem) => (
-            <div
+            <div 
               key={classItem._id}
               className="class-item"
               onDoubleClick={() => handleDoubleClick(classItem._id)}

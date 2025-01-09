@@ -23,7 +23,7 @@ const FooterStudent = () => {
         <img
           src={NotificacoesIcon}
           alt="Notificações"
-          className="footer__icon"
+          className="footer__icon" onClick={() => navigate('/student/informe')}
         />
         <span>Notificações</span>
       </div>

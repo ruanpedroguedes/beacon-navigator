@@ -1,0 +1,11 @@
+/* Centralizar o contêiner que envolve os cards */
+#turmas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Alinha horizontalmente ao centro */
+    align-items: center; /* Alinha verticalmente ao centro */
+    gap: 20px; /* Espaço entre os cards */
+    padding: 20px;
+  }
+
+  
