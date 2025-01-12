@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import useAuth from '../../hooks/useAuth'; // Importa o hook useAuth
 
-const StudentInforme = ({ alunoNome }) => {
+const InformeStudent = () => {
+  const { user } = useAuth(); // Obtém o nome do aluno logado
   const [informes, setInformes] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchInformes = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/informes/aluno/${alunoNome}`);
+        const response = await fetch(`http://localhost:5000/api/informes/aluno/${user}`);
         const data = await response.json();
-
-        if (response.ok) {
-          setInformes(data);
-        } else {
-          setErrorMessage(data.message || 'Erro ao buscar informes');
-        }
+        setInformes(data);
       } catch (error) {
         console.error('Erro ao buscar informes:', error);
-        setErrorMessage('Erro ao conectar ao servidor. Tente novamente mais tarde.');
       }
     };
 
-    if (alunoNome) {
+    if (user) {
       fetchInformes();
     }
-  }, [alunoNome]);
+  }, [user]);
 
   return (
-    <div className="aluno-informes">
-      <h2>Informes do Aluno</h2>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div>
+      <h1>Informes de {user}</h1>
       <div className="informes-container">
         {informes.map((informe, index) => (
           <div key={index} className="informe-card">
@@ -43,4 +37,4 @@ const StudentInforme = ({ alunoNome }) => {
   );
 };
 
-export default StudentInforme;
+export default InformeStudent;

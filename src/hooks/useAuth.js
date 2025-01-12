@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 
 const useAuth = () => {
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Recupera o token do localStorage ao carregar o componente
     const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user'); // Adiciona a recuperação do usuário
     setToken(storedToken);
+    setUser(storedUser);
   }, []);
 
-  return { token, setToken };
+  return { token, user, setToken, setUser };
 };
 
 export default useAuth;

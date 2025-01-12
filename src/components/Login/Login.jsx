@@ -32,17 +32,16 @@ const FormLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
-        const { token, role } = data;
-
-        if (!token || !role) {
+        const { token, role, nome } = data; // Adiciona o nome do aluno
+      
+        if (!token || !role || !nome) { // Verifica se o nome também está presente
           setErrorMessage('Resposta inválida do servidor. Contate o suporte.');
           return;
         }
-
-        // Armazena o token no localStorage
+      
         localStorage.setItem('token', token);
-
-        // Verifica e redireciona o usuário com base na role
+        localStorage.setItem('user', nome); // Armazena o nome do aluno
+      
         switch (role) {
           case 'admin':
             navigate('/admin/dashboard');
@@ -57,6 +56,7 @@ const FormLogin = () => {
             setErrorMessage('Role inválida recebida. Contate o suporte.');
             return;
         }
+      
       } else {
         // Exibe mensagem de erro vinda do servidor
         setErrorMessage(data.message || 'Erro ao fazer login. Verifique suas credenciais.');

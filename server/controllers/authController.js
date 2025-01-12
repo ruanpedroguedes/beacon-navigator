@@ -56,12 +56,11 @@ const login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // Retorna o token e o tipo de usuário
-    res.status(200).json({ token, role: user.role });
+    // Retorna o token, o tipo de usuário e o nome do usuário
+    res.status(200).json({ token, role: user.role, nome: user.nome });
   } catch (error) {
     console.error('Erro ao fazer login:', error);
     res.status(500).json({ message: 'Erro ao fazer login.' });
   }
 };
-
 module.exports = { register, login };
