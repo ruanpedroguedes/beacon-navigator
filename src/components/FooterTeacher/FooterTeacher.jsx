@@ -16,18 +16,6 @@ const FooterStudent = () => {
         <span>Beacons</span>
       </div>
       <div className="footer__item">
-        <img src={RotasIcon} alt="Rotas" className="footer__icon" />
-        <span>Rotas</span>
-      </div>
-      <div className="footer__item">
-        <img
-          src={NotificacoesIcon}
-          alt="Notificações"
-          className="footer__icon"
-        />
-        <span>Notificações</span>
-      </div>
-      <div className="footer__item">
         <img src={TurmasIcon} alt="Turmas" className="footer__icon" onClick={() => navigate('/teacher/dashboard')} />
         <span className="footer__item--active">Turmas</span>
       </div>

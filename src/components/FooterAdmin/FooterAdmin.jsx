@@ -16,14 +16,10 @@ const FooterStudent = () => {
         <span>Beacons</span>
       </div>
       <div className="footer__item">
-        <img src={RotasIcon} alt="Rotas" className="footer__icon" />
-        <span>Rotas</span>
-      </div>
-      <div className="footer__item">
         <img
           src={NotificacoesIcon}
           alt="Notificações"
-          className="footer__icon"
+          className="footer__icon"  onClick={() => navigate('/admin/informe')}
         />
         <span>Notificações</span>
       </div>

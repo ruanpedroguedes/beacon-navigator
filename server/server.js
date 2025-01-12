@@ -67,3 +67,6 @@ app.use('/api/users', userRoutes);
 const avisosRoutes = require('./routes/avisosRoutes');
 app.use('/api/avisos', avisosRoutes);
 
+const informeRoutes = require('./routes/informeRoutes');
+app.use('/api/informes', informeRoutes);
+
