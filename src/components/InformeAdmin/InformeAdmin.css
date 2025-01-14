@@ -1,7 +1,7 @@
 .admin-page {
   padding: 20px;
   font-family: Arial, sans-serif;
-  font-family: 'poppins';
+  font-family: 'Poppins', sans-serif;
 }
 
 button {
@@ -63,7 +63,6 @@ button:hover {
 }
 
 .card {
-  height: 100%;     
   background: #f9f9f9;
   padding: 20px;
   border: 1px solid #ddd;
@@ -71,7 +70,9 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   display: flex;
+  flex-direction: column; /* Alinha os itens verticalmente */
   align-items: flex-start;
+  height: 100%;
 }
 
 .card:hover {
@@ -89,15 +90,12 @@ button:hover {
 
 .card h3 {
   margin-top: 0;
+  margin-bottom: 5px; /* Espaço entre o nome e o dia da semana */
   color: #333;
 }
 
 .card p {
-  margin: 5px 0;
+  margin: 0; /* Remove margens extras */
+  margin-bottom: 5px; /* Espaço entre as linhas de texto */
   color: #666;
-  margin: 6x;
-}
-
-.card p:first-of-type {
-  margin-lerft: 20px; /* Espaço maior entre o nome e o dia da semana */
 }

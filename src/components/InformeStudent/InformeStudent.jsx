@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './InformeStudent.css';
 import useAuth from '../../hooks/useAuth'; // Importa o hook useAuth
 
 const InformeStudent = () => {
