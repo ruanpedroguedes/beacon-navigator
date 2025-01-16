@@ -123,7 +123,7 @@ input::placeholder {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 390px) {
   /* Para celulares */
   .form-wrapper {
     padding: 1rem;
@@ -150,7 +150,7 @@ input::placeholder {
 }
 
 /* Para telas menores que 480px (modelos de smartphones compactos) */
-@media (max-width: 360px) {
+@media (max-width: 390px) {
   .form-wrapper {
     padding: 0.5rem;
     max-width: 100%;
@@ -228,7 +228,7 @@ input[name="pcdDetails"] {
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 390px) {
   select {
     font-size: 12px;
   }
