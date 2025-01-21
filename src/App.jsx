@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Cadastro from './pages/Cadastro';
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import Beacon from "./pages/BeaconConect";
 import allRoutes from './routes';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/beacon" element={<Beacon/>} />
         <Route path="/login" element={<Login />} />
         {allRoutes}
         <Route path="*" element={<NotFound />} />

@@ -108,6 +108,15 @@ input::placeholder {
   color: #9CA3AF;
 }
 
+.beacon-conect a {
+  color: rgba(255, 0, 0, 0.897);
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
 /* Media queries para responsividade */
 @media (max-width: 768px) {
   .form-wrapper {

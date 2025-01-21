@@ -12,7 +12,7 @@ const FooterStudent = () => {
   return (
     <footer className="footer">
       <div className="footer__item">
-        <img src={BeaconsIcon} alt="Beacons" className="footer__icon" />
+        <img src={BeaconsIcon} alt="Beacons" className="footer__icon" onClick={() => navigate('/beacon')} />
         <span>Beacons</span>
       </div>
       <div className="footer__item">

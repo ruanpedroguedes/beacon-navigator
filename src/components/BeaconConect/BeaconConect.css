@@ -1,0 +1,55 @@
+.container {
+  padding: 20px;
+  font-family: poppins;
+}
+
+.button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.button-connect {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.button-read {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.button-disconnect {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.button-disabled {
+  background-color: #ccc;
+  color: #000;
+}
+
+.error-message {
+  color: red;
+}
+
+.read-data-title {
+  color: white;
+}
+
+.read-data {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.beacon-conect{
+  font-size: 20px;
+  text-decoration: none;        
+}
+

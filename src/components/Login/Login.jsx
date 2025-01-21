@@ -111,6 +111,9 @@ const FormLogin = () => {
               <a href="/cadastro"> Cadastre-se</a>
             </span>
           </p>
+          <span className="beacon-conect">
+              <a href="/beacon"> Beacon</a>
+            </span>
         </div>
       </div>
     </div>
