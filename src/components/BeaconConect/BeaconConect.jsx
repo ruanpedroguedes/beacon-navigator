@@ -3,7 +3,8 @@ import "./BeaconConect.css"; // Importando o arquivo CSS externo
 
 function BluetoothRead() {
   const [device, setDevice] = useState(null); 
-  const [readData, setReadData] = useState(""); 
+  const [readData, setReadData] = useState(""); // Dados brutos lidos
+  const [parsedJson, setParsedJson] = useState(null); // Dados JSON parseados (se aplicável)
   const [error, setError] = useState(""); 
   const [connected, setConnected] = useState(false); 
   const [characteristicTx, setCharacteristicTx] = useState(null); 
@@ -44,7 +45,16 @@ function BluetoothRead() {
       const value = await characteristicTx.readValue();
       const decoder = new TextDecoder("utf-8");
       const data = decoder.decode(value);
-      setReadData(data);
+
+      setReadData(data); // Sempre armazena os dados como texto bruto
+
+      // Detectar se os dados são JSON
+      try {
+        const jsonData = JSON.parse(data); // Se for JSON válido
+        setParsedJson(jsonData);
+      } catch {
+        setParsedJson(null); // Não é JSON, mantém os dados brutos
+      }
     } catch (err) {
       setError("Erro ao ler a característica.");
     }
@@ -97,16 +107,42 @@ function BluetoothRead() {
       </button>
       {error && <p className="error-message">{error}</p>}
       <h3 className="read-data-title">Dados Lidos:</h3>
-      <textarea
-        value={readData}
-        readOnly
-        className="read-data"
-      ></textarea>
+      {parsedJson ? (
+        <table className="read-data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>PCD</th>
+              <th>Detalhes PCD</th>
+            </tr>
+          </thead>
+          <tbody>
+            {parsedJson.map((item) => (
+              <tr key={item._id}>
+                <td>{item._id}</td>
+                <td>{item.nome}</td>
+                <td>{item.email}</td>
+                <td>{item.role}</td>
+                <td>{item.isPCD ? "Sim" : "Não"}</td>
+                <td>{item.pcdDetails}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <textarea
+          value={readData || "Nenhum dado disponível"}
+          readOnly
+          className="read-data"
+        ></textarea>
+      )}
       <span className="beacon-conect">
-          <a href="/login"> Login</a>
+        <a href="/login"> Login</a>
       </span> 
     </div>
-    
   );
 }
 

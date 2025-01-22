@@ -10,10 +10,11 @@ const app = express();
 
 // Configurando o middleware CORS
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5176'], // Lista de origens permitidas
+  origin: 'http://localhost:5175', // Permita a origem do frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-  credentials: true, // Se precisar de cookies
+  credentials: true, // Permita cookies e cabeçalhos com credenciais
 }));
+
 
 
 // Usando middleware para parsear JSON
