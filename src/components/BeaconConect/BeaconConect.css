@@ -1,19 +1,24 @@
+body {
+  font-family: 'Poppins', sans-serif; /* Define a fonte para todo o documento */
+  margin: 0; /* Remove margens padrão */
+}
+
 .container {
   padding: 20px;
-  font-family: poppins;
 }
 
 .button {
   padding: 10px 20px;
   margin: 10px;
-  font-size: 16px;
+  font-size: 21px;
   cursor: pointer;
   border: none;
   border-radius: 5px;
+  font-weight: 500;
 }
 
 .button-connect {
-  background-color: #007bff;
+  background-color: #DA1010;
   color: #fff;
 }
 
@@ -23,7 +28,7 @@
 }
 
 .button-disconnect {
-  background-color: #ff4d4d;
+  background-color: #DA1010;
   color: #fff;
 }
 
@@ -33,11 +38,12 @@
 }
 
 .error-message {
-  color: red;
+  color: #DA1010;
 }
 
 .read-data-title {
   color: white;
+  font-weight: 500;
 }
 
 .read-data {
@@ -46,10 +52,18 @@
   padding: 10px;
   font-size: 14px;
   border-radius: 8px;
+  font-family: 'Poppins';
 }
 
-.beacon-conect{
+.beacon-conect {
   font-size: 20px;
-  text-decoration: none;        
+  text-decoration: none;
 }
 
+.highlight {
+  color: #DA1010; /* Define a cor do texto como vermelha */
+}
+
+.title{
+  font-weight: 400;
+}

@@ -83,13 +83,13 @@ function BluetoothRead() {
 
   return (
     <div className="container">
-      <h1>Beacon Navigator</h1>
+      <h1 className="title">Olá, Como posso te ajudar? <span className="highlight">Veja os seus Beacons!</span> </h1>
       <button
         onClick={connectToDevice}
         className={`button ${connected ? "button-disabled" : "button-connect"}`}
         disabled={connected}
       >
-        {connected ? "Conectado" : "Conectar ao dispositivo"}
+        {connected ? "Conectado" : "+  Novo Beacon"}
       </button>
       <button
         onClick={readCharacteristic}
@@ -106,7 +106,7 @@ function BluetoothRead() {
         Desconectar
       </button>
       {error && <p className="error-message">{error}</p>}
-      <h3 className="read-data-title">Dados Lidos:</h3>
+      <h3 className="read-data-title">Informações:</h3>
       {parsedJson ? (
         <table className="read-data-table">
           <thead>
