@@ -27,3 +27,9 @@
 .footer__item--active {
   color: red; /* Texto vermelho para "ativo" */
 }
+
+@media (max-width: 390px) {
+  .footer{
+    align-items: center;
+  }
+}

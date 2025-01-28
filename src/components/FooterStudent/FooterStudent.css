@@ -27,3 +27,24 @@
 .footer__item--active {
   color: red; /* Texto vermelho para "ativo" */
 }
+
+
+
+/* Estilos responsivos */
+@media (max-width: 390px) {
+  .footer {
+    grid-template: repeat(2, 1fr);
+    padding: 3rem 2rem;
+  }
+}
+
+.footer .footer__item {
+  margin-top: 0%;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}

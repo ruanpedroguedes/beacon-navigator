@@ -1,0 +1,15 @@
+@media (max-width: 390px) {
+    body{
+        align-items: center;
+        position: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .header{
+        align-items: center;
+    }
+
+    
+}

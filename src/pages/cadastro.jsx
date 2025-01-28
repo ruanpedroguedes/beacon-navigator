@@ -1,5 +1,6 @@
 import FormFisico from "../components/Form/FormFisico";
 import { useState } from 'react';
+import './FormCadastro.css'
 
 export default function Cadastro (){
 
