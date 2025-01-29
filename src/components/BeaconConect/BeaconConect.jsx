@@ -1,45 +1,29 @@
 import React, { useState, useEffect } from "react";
 
 export default function BeaconConect() {
-  const [device, setDevice] = useState(null);
-  const [jsonString, setJsonString] = useState(""); // Armazena os chunks recebidos
-  const [data, setData] = useState(null); // Armazena os dados processados
-  const [error, setError] = useState(null); // Armazena mensagens de erro
+  const [device, setDevice] = useState(null); // Dispositivo BLE conectado
+  const [informes, setInformes] = useState([]); // Dados filtrados da API
+  const [error, setError] = useState(null); // Mensagens de erro
 
-  // Função para validar JSON
-  const isValidJSON = (string) => {
+  // Função para buscar dados da API e processar apenas os informes
+  const fetchInformes = async () => {
     try {
-      JSON.parse(string);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
-
-  // Função para processar os chunks recebidos
-  const handleChunk = (chunk) => {
-    try {
-      // Remover caracteres não imprimíveis
-      chunk = chunk.replace(/[^\x20-\x7E]/g, "");
-
-      // Adicionar o chunk ao buffer
-      const updatedJsonString = jsonString + chunk;
-
-      // Tentar parsear o JSON
-      if (isValidJSON(updatedJsonString)) {
-        const parsedData = JSON.parse(updatedJsonString);
-        setData(parsedData);
-        setJsonString(""); // Limpar buffer após parsear
-      } else {
-        setJsonString(updatedJsonString); // Continuar aguardando mais dados
+      const response = await fetch("http://192.168.137.1:5000/api/informes");
+      if (!response.ok) {
+        throw new Error(`Erro na API: ${response.statusText}`);
       }
-    } catch (e) {
-      setError("Erro ao processar o chunk recebido.");
-      console.error("Erro ao processar chunk:", chunk, e);
+      const apiData = await response.json();
+
+      // Filtra ou processa os dados caso necessário (opcional)
+      setInformes(apiData); // Armazena os dados recebidos diretamente
+      console.log("Informes recebidos:", apiData); // Exibe apenas os informes no console
+    } catch (error) {
+      console.error("Erro ao buscar dados da API:", error);
+      setError("Erro ao buscar dados da API.");
     }
   };
 
-  // Função de conexão BLE
+  // Conexão BLE (pode ser ajustada para uso com informes, se necessário)
   const connectToDevice = async () => {
     try {
       console.log("Solicitando dispositivo BLE...");
@@ -54,33 +38,17 @@ export default function BeaconConect() {
       console.log("Conectando ao GATT Server...");
       const server = await bleDevice.gatt.connect();
       console.log("GATT Server conectado.");
-
-      console.log("Obtendo serviço...");
-      const service = await server.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca93");
-
-      console.log("Obtendo característica...");
-      const characteristic = await service.getCharacteristic("6e400003-b5a3-f393-e0a9-e50e24dcca93");
-
-      console.log("Iniciando leitura...");
-      characteristic.addEventListener("characteristicvaluechanged", (event) => {
-        const value = new TextDecoder().decode(event.target.value);
-        console.log("Chunk recebido:", value);
-        handleChunk(value);
-      });
-
-      await characteristic.startNotifications();
-      console.log("Notificações iniciadas.");
     } catch (e) {
-      setError("Erro ao conectar ao dispositivo.");
+      setError("Erro ao conectar ao dispositivo BLE.");
       console.error("Erro ao conectar:", e);
     }
   };
 
+  // Listener para desconexão BLE (caso necessário)
   useEffect(() => {
     if (device) {
-      // Lidando com desconexão
       device.addEventListener("gattserverdisconnected", () => {
-        console.log("Dispositivo desconectado.");
+        console.log("Dispositivo BLE desconectado.");
         setDevice(null);
       });
     }
@@ -88,18 +56,30 @@ export default function BeaconConect() {
 
   return (
     <div>
-      <h1>Conectar ao Beacon</h1>
-      {device ? (
-        <p>Dispositivo conectado: {device.name}</p>
-      ) : (
-        <button onClick={connectToDevice}>Conectar</button>
-      )}
-      {data && (
+      <h1>Informes</h1>
+      <button
+        onClick={async () => {
+          await fetchInformes(); // Busca os dados mais recentes da API
+        }}
+      >
+        Buscar Informes
+      </button>
+
+      <button onClick={connectToDevice}>Conectar ao BLE</button>
+
+      {informes.length > 0 && (
         <div>
-          <h2>Dados Recebidos:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          <h2>Dados dos Informes:</h2>
+          <ul>
+            {informes.map((informe) => (
+              <li key={informe._id}>
+                <strong>{informe.nome}</strong> - {informe.dia}: {informe.descricao}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
+
       {error && (
         <div>
           <h2>Erro:</h2>
