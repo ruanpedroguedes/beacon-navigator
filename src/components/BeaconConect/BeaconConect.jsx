@@ -1,155 +1,111 @@
 import React, { useState, useEffect } from "react";
-import "./BeaconConect.css"; // Importando o arquivo CSS externo
 
-function BluetoothRead() {
-  const [device, setDevice] = useState(null); 
-  const [readData, setReadData] = useState(""); // Dados brutos lidos
-  const [parsedJson, setParsedJson] = useState(null); // Dados JSON parseados (se aplicável)
-  const [error, setError] = useState(""); 
-  const [connected, setConnected] = useState(false); 
-  const [characteristicTx, setCharacteristicTx] = useState(null); 
+export default function BeaconConect() {
+  const [device, setDevice] = useState(null);
+  const [jsonString, setJsonString] = useState(""); // Armazena os chunks recebidos
+  const [data, setData] = useState(null); // Armazena os dados processados
+  const [error, setError] = useState(null); // Armazena mensagens de erro
 
-  const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca93";
-  const CHARACTERISTIC_UUID_TX = "6e400003-b5a3-f393-e0a9-e50e24dcca93";
-
-  const connectToDevice = async () => {
-    setError(""); 
+  // Função para validar JSON
+  const isValidJSON = (string) => {
     try {
+      JSON.parse(string);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  // Função para processar os chunks recebidos
+  const handleChunk = (chunk) => {
+    try {
+      // Remover caracteres não imprimíveis
+      chunk = chunk.replace(/[^\x20-\x7E]/g, "");
+
+      // Adicionar o chunk ao buffer
+      const updatedJsonString = jsonString + chunk;
+
+      // Tentar parsear o JSON
+      if (isValidJSON(updatedJsonString)) {
+        const parsedData = JSON.parse(updatedJsonString);
+        setData(parsedData);
+        setJsonString(""); // Limpar buffer após parsear
+      } else {
+        setJsonString(updatedJsonString); // Continuar aguardando mais dados
+      }
+    } catch (e) {
+      setError("Erro ao processar o chunk recebido.");
+      console.error("Erro ao processar chunk:", chunk, e);
+    }
+  };
+
+  // Função de conexão BLE
+  const connectToDevice = async () => {
+    try {
+      console.log("Solicitando dispositivo BLE...");
       const bleDevice = await navigator.bluetooth.requestDevice({
-        filters: [{ namePrefix: "BeaconNavigator" }], 
-        optionalServices: [SERVICE_UUID],
+        acceptAllDevices: true,
+        optionalServices: ["6e400001-b5a3-f393-e0a9-e50e24dcca93"], // Substitua pelo UUID correto
       });
 
+      console.log("Dispositivo selecionado:", bleDevice.name);
       setDevice(bleDevice);
 
-      bleDevice.addEventListener("gattserverdisconnected", handleDisconnection);
-
+      console.log("Conectando ao GATT Server...");
       const server = await bleDevice.gatt.connect();
-      setConnected(true);
+      console.log("GATT Server conectado.");
 
-      const service = await server.getPrimaryService(SERVICE_UUID);
-      const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID_TX);
-      setCharacteristicTx(characteristic); 
-    } catch (err) {
-      setError("Erro ao conectar ao dispositivo BLE. Verifique se o dispositivo está acessível.");
-    }
-  };
+      console.log("Obtendo serviço...");
+      const service = await server.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca93");
 
-  const readCharacteristic = async () => {
-    if (!characteristicTx) {
-      setError("Característica não está disponível.");
-      return;
-    }
+      console.log("Obtendo característica...");
+      const characteristic = await service.getCharacteristic("6e400003-b5a3-f393-e0a9-e50e24dcca93");
 
-    try {
-      const value = await characteristicTx.readValue();
-      const decoder = new TextDecoder("utf-8");
-      const data = decoder.decode(value);
+      console.log("Iniciando leitura...");
+      characteristic.addEventListener("characteristicvaluechanged", (event) => {
+        const value = new TextDecoder().decode(event.target.value);
+        console.log("Chunk recebido:", value);
+        handleChunk(value);
+      });
 
-      setReadData(data); // Sempre armazena os dados como texto bruto
-
-      // Detectar se os dados são JSON
-      try {
-        const jsonData = JSON.parse(data); // Se for JSON válido
-        setParsedJson(jsonData);
-      } catch {
-        setParsedJson(null); // Não é JSON, mantém os dados brutos
-      }
-    } catch (err) {
-      setError("Erro ao ler a característica.");
-    }
-  };
-
-  const handleDisconnection = () => {
-    setConnected(false);
-    setCharacteristicTx(null); 
-  };
-
-  const disconnectDevice = () => {
-    if (device && device.gatt.connected) {
-      device.gatt.disconnect();
-      setConnected(false);
-      setCharacteristicTx(null); 
+      await characteristic.startNotifications();
+      console.log("Notificações iniciadas.");
+    } catch (e) {
+      setError("Erro ao conectar ao dispositivo.");
+      console.error("Erro ao conectar:", e);
     }
   };
 
   useEffect(() => {
-    return () => {
-      if (device && device.gatt.connected) {
-        device.gatt.disconnect();
-      }
-    };
+    if (device) {
+      // Lidando com desconexão
+      device.addEventListener("gattserverdisconnected", () => {
+        console.log("Dispositivo desconectado.");
+        setDevice(null);
+      });
+    }
   }, [device]);
 
   return (
-    <div className="container">
-      <h1 className="title">Olá, Como posso te ajudar? <span className="highlight">Veja os seus Beacons!</span> </h1>
-      <button
-        onClick={connectToDevice}
-        className={`button ${connected ? "button-disabled" : "button-connect"}`}
-        disabled={connected}
-      >
-        {connected ? "Conectado" : "+  Novo Beacon"}
-      </button>
-      <button
-        onClick={readCharacteristic}
-        className="button button-read"
-        disabled={!connected || !characteristicTx}
-      >
-        Ler Dados
-      </button>
-      <button
-        onClick={disconnectDevice}
-        className="button button-disconnect"
-        disabled={!connected}
-      >
-        Desconectar
-      </button>
-      {error && <p className="error-message">{error}</p>}
-      <h3 className="read-data-title">Informações:</h3>
-      {parsedJson ? (
-        <table className="read-data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>PCD</th>
-              <th>Detalhes PCD</th>
-            </tr>
-          </thead>
-          <tbody>
-            {parsedJson.map((item) => (
-              <tr key={item._id}>
-                <td>{item._id}</td>
-                <td>{item.nome}</td>
-                <td>{item.email}</td>
-                <td>{item.role}</td>
-                <td>{item.isPCD ? "Sim" : "Não"}</td>
-                <td>{item.pcdDetails}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <textarea
-          value={readData || "Nenhum dado disponível"}
-          readOnly
-          className="read-data"
-        ></textarea>
-      )}
-      <span className="beacon-conect">
-        <a href="/login"> Login</a>
-      </span> 
-    </div>
-  );
-}
-
-export default function App() {
-  return (
     <div>
-      <BluetoothRead />
+      <h1>Conectar ao Beacon</h1>
+      {device ? (
+        <p>Dispositivo conectado: {device.name}</p>
+      ) : (
+        <button onClick={connectToDevice}>Conectar</button>
+      )}
+      {data && (
+        <div>
+          <h2>Dados Recebidos:</h2>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      )}
+      {error && (
+        <div>
+          <h2>Erro:</h2>
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 }
