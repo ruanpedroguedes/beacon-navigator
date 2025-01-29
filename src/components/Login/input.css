@@ -6,7 +6,7 @@
 
 .input-group label {
   font-family: "Poppins", sans-serif;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .input-group input {
@@ -48,18 +48,25 @@ text-align: center;
 
 .input-group input {
 width: 100%;
-height: 40px;
+height: 20px;
+margin: 0 110px;
 }
 
 .form-button {
-margin-top: 1rem;
-padding: 0.6rem;
+margin-top: 1%;
+margin: 0 10px;
+padding: 0.7rem;
 background-color: rgba(255, 0, 0, 0.76);
 color: white;
 font-size: 18px;
 border: none;
 border-radius: 15px;
 cursor: pointer;
+}
+
+.login-logo {
+width: 100%; /* Ajuste o tamanho da imagem */
+margin: 0 auto 1rem; /* Centraliza a imagem e adiciona espaçamento inferior */
 }
 
 /* Media query para iPhone 12 Pro (390px largura) */
@@ -69,17 +76,26 @@ cursor: pointer;
   max-width: 100%;
 }
 
+.login-logo {
+  width: 100px; /* Ajuste o tamanho da imagem */
+  margin: 0 auto 1rem; /* Centraliza a imagem e adiciona espaçamento inferior */
+}
+
 .form-header h1 {
   font-size: 24px;
 }
 
 .input-group input {
-  height: 35px;
+  width: 100%;
+  height: 20px;
+  margin: 0 100px;
 }
 
 .form-button {
   font-size: 16px;
   padding: 0.5rem;
+  margin: 50%;
+  display: flex;
 }
 
 .form-footer {
@@ -93,26 +109,3 @@ align-items: center ;
 text-align: center;
 }
 
-/* Estilos gerais de dispositivos menores */
-@media (max-width: 320px) {
-.form-wrapper {
-  padding: 0.5rem;
-}
-
-.form-header h1 {
-  font-size: 20px;
-}
-
-.input-group input {
-  height: 30px;
-}
-
-.form-button {
-  font-size: 14px;
-  padding: 0.4rem;
-}
-
-.form-footer {
-  font-size: 10px;
-}
-}
