@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from "/src/assets/logobeacon.png";
 import './Login.css';
 import './Input.css';
 
@@ -71,6 +72,7 @@ const FormLogin = () => {
     <div className="form-wrapper">
       <div className="form-container">
         <div className="form-header">
+          <img src={logo} alt="Logo" className="login-logo" />
           <h1>Entrar</h1>
         </div>
 
@@ -111,9 +113,6 @@ const FormLogin = () => {
               <a href="/cadastro"> Cadastre-se</a>
             </span>
           </p>
-          <span className="beacon-conect">
-              <a href="/beacon"> Beacon</a>
-            </span>
         </div>
       </div>
     </div>

@@ -22,6 +22,14 @@ body {
   color: white;
 }
 
+.login-logo {
+  width: 100px; /* Ajuste o tamanho da imagem */
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem; /* Centraliza a imagem e adiciona espaçamento inferior */
+}
+
+
 p {
   color: #797979;
   font-size: 15px;
@@ -59,8 +67,8 @@ div.form-container {
 }
 
 .form-button {
-  margin-top: 1rem;
-  padding: 0.75rem;
+  margin-top: 0 85;
+  padding: 0.5rem;
   background-color: rgba(255, 0, 0, 0.76);
   color: #FFFFFF;
   font-size: 20px;
@@ -110,15 +118,6 @@ input::placeholder {
 
 /* Media queries para responsividade */
 @media (max-width: 768px) {
-  .form-wrapper {
-    padding: 1.5rem;
-    max-width: 90%;
-  }
-
-  .form-button {
-    font-size: 18px;
-    padding: 0.7rem;
-  }
 
   .input-group {
     display: flex;
@@ -135,58 +134,35 @@ input::placeholder {
   }
 }
 
-@media (max-width: 480px) {
-  .form-wrapper {
-    padding: 1rem;
-    max-width: 95%;
+@media (max-width: 390px) {
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
   }
 
-  .form-button {
-    font-size: 16px;
-    padding: 0.6rem;
+  .form-wrapper {
+    padding: 1.5rem;
+    max-width: 90%;
   }
 
   .input-group input {
     width: 100%;
     height: 35px;
+    margin: 0 85px;
   }
 
   .form-footer {
     font-size: 12px;
   }
-}
 
-@media (max-width: 360px) {
-  .form-wrapper {
-    padding: 0.5rem;
-    max-width: 100%;
-  }
-
-  .form-button {
-    font-size: 14px;
-    padding: 0.5rem;
-  }
-
-  .input-group input {
-    width: 100%;
-    height: 30px;
+  .form-header h1 {
+    font-size: 30px;
   }
 
   .form-footer {
-    font-size: 10px;
+    font-size: 14px;
   }
-}
-
-.form-footer p {
-  color: white;
-}
-
-.cadastro-link a {
-  color: red;
-  text-decoration: none;
-}
-
-h1 {
-  color: white;
 }
 
