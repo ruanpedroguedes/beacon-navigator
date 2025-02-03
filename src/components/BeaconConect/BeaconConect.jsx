@@ -1,91 +1,182 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 export default function BeaconConect() {
-  const [device, setDevice] = useState(null); // Dispositivo BLE conectado
-  const [informes, setInformes] = useState([]); // Dados filtrados da API
-  const [error, setError] = useState(null); // Mensagens de erro
+  const [device, setDevice] = useState(null);
+  const [dataList, setDataList] = useState([]);
+  const [error, setError] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [logMessages, setLogMessages] = useState([]);
+  const receivedMessages = useRef(new Set());
 
-  // Função para buscar dados da API e processar apenas os informes
-  const fetchInformes = async () => {
+  const jsonBufferRef = useRef("");
+  let characteristicRef = useRef(null);
+
+  const addLogMessage = (message) => {
+    setLogMessages((prevLogs) => [...prevLogs, message]);
+  };
+
+  const isValidJSON = (string) => {
     try {
-      const response = await fetch("http://192.168.137.1:5000/api/informes");
-      if (!response.ok) {
-        throw new Error(`Erro na API: ${response.statusText}`);
-      }
-      const apiData = await response.json();
-
-      // Filtra ou processa os dados caso necessário (opcional)
-      setInformes(apiData); // Armazena os dados recebidos diretamente
-      console.log("Informes recebidos:", apiData); // Exibe apenas os informes no console
-    } catch (error) {
-      console.error("Erro ao buscar dados da API:", error);
-      setError("Erro ao buscar dados da API.");
+      JSON.parse(string);
+      return true;
+    } catch (e) {
+      return false;
     }
   };
 
-  // Conexão BLE (pode ser ajustada para uso com informes, se necessário)
+  const handleChunk = (chunk) => {
+    try {
+      chunk = chunk.replace(/[^\x20-\x7E]/g, "");
+      jsonBufferRef.current += chunk;
+      addLogMessage(`Chunk recebido: ${chunk}`);
+
+      if (jsonBufferRef.current.includes("}")) {
+        let possibleJSON = jsonBufferRef.current;
+        if (isValidJSON(possibleJSON)) {
+          const parsedData = JSON.parse(possibleJSON);
+
+          if (parsedData._id && receivedMessages.current.has(parsedData._id)) {
+            addLogMessage("Mensagem repetida detectada, ignorando...");
+            return;
+          }
+
+          if (parsedData._id) {
+            receivedMessages.current.add(parsedData._id);
+          }
+
+          setDataList((prevList) => [...prevList, parsedData]);
+          jsonBufferRef.current = "";
+        }
+      }
+    } catch (e) {
+      setError("Erro ao processar chunk recebido.");
+      addLogMessage(`Erro ao processar chunk: ${chunk} - ${e.message}`);
+    }
+  };
+
   const connectToDevice = async () => {
     try {
-      console.log("Solicitando dispositivo BLE...");
+      addLogMessage("Solicitando dispositivo BLE...");
       const bleDevice = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ["6e400001-b5a3-f393-e0a9-e50e24dcca93"], // Substitua pelo UUID correto
+        optionalServices: ["6e400001-b5a3-f393-e0a9-e50e24dcca93"],
       });
 
-      console.log("Dispositivo selecionado:", bleDevice.name);
+      addLogMessage(`Dispositivo selecionado: ${bleDevice.name}`);
       setDevice(bleDevice);
 
-      console.log("Conectando ao GATT Server...");
-      const server = await bleDevice.gatt.connect();
-      console.log("GATT Server conectado.");
+      bleDevice.addEventListener("gattserverdisconnected", async () => {
+        addLogMessage("Dispositivo desconectado, tentando reconectar...");
+        setIsConnected(false);
+        await reconnectDevice(bleDevice);
+      });
+
+      await establishConnection(bleDevice);
     } catch (e) {
-      setError("Erro ao conectar ao dispositivo BLE.");
-      console.error("Erro ao conectar:", e);
+      setError("Erro ao conectar ao dispositivo.");
+      addLogMessage(`Erro ao conectar: ${e.message}`);
     }
   };
 
-  // Listener para desconexão BLE (caso necessário)
-  useEffect(() => {
-    if (device) {
-      device.addEventListener("gattserverdisconnected", () => {
-        console.log("Dispositivo BLE desconectado.");
-        setDevice(null);
+  const establishConnection = async (bleDevice) => {
+    try {
+      if (!bleDevice.gatt.connected) {
+        addLogMessage("Tentando conectar ao GATT Server...");
+        await bleDevice.gatt.connect();
+      }
+
+      // Verificação adicional do estado de conexão
+      if (!bleDevice.gatt.connected) {
+        throw new Error("O GATT Server ainda está desconectado após tentativa de conexão.");
+      }
+
+      addLogMessage("GATT Server conectado.");
+      setIsConnected(true);
+
+      addLogMessage("Obtendo serviço...");
+      const service = await bleDevice.gatt.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca93");
+
+      addLogMessage("Obtendo característica...");
+      const characteristic = await service.getCharacteristic("6e400003-b5a3-f393-e0a9-e50e24dcca93");
+      characteristicRef.current = characteristic;
+
+      addLogMessage("Iniciando leitura...");
+      characteristic.addEventListener("characteristicvaluechanged", (event) => {
+        const value = new TextDecoder().decode(event.target.value);
+        handleChunk(value);
       });
+
+      await characteristic.startNotifications();
+      addLogMessage("Notificações iniciadas.");
+    } catch (e) {
+      setError("Erro ao recuperar serviços BLE.");
+      addLogMessage(`Erro ao recuperar serviços BLE: ${e.message}`);
+
+      if (bleDevice.gatt.connected) {
+        addLogMessage("Desconectando e tentando novamente...");
+        bleDevice.gatt.disconnect();
+      }
+
+      await reconnectDevice(bleDevice);
     }
-  }, [device]);
+  };
+
+  const reconnectDevice = async (bleDevice) => {
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts && !bleDevice.gatt.connected) {
+      try {
+        addLogMessage(`Tentando reconectar... (Tentativa ${attempts + 1})`);
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // Aumentando o tempo de espera para 5 segundos
+        await establishConnection(bleDevice);
+        if (bleDevice.gatt.connected) {
+          addLogMessage("Reconectado com sucesso!");
+          break;
+        }
+      } catch (e) {
+        addLogMessage(`Falha na tentativa ${attempts + 1}: ${e.message}`);
+      }
+      attempts++;
+    }
+
+    if (attempts === maxAttempts) {
+      addLogMessage("Falha ao reconectar após várias tentativas. Reconecte manualmente.");
+    }
+  };
+
+  const disconnectDevice = () => {
+    if (device && device.gatt.connected) {
+      device.gatt.disconnect();
+      addLogMessage("Dispositivo desconectado manualmente.");
+    }
+    setDevice(null);
+    setIsConnected(false);
+  };
 
   return (
     <div>
-      <h1>Informes</h1>
-      <button
-        onClick={async () => {
-          await fetchInformes(); // Busca os dados mais recentes da API
-        }}
-      >
-        Buscar Informes
-      </button>
+      <h2 style={{textAlign: "left"}}>Olá,</h2>
+      <h1 style={{ fontSize: '24px' }}>
+         Como posso te ajudar?{' '}
+        <span style={{ color: 'red', fontWeight: '300' }}>Veja os seus Beacons!</span>
+      </h1>
 
-      <button onClick={connectToDevice}>Conectar ao BLE</button>
-
-      {informes.length > 0 && (
+      {isConnected ? (
         <div>
-          <h2>Dados dos Informes:</h2>
-          <ul>
-            {informes.map((informe) => (
-              <li key={informe._id}>
-                <strong>{informe.nome}</strong> - {informe.dia}: {informe.descricao}
-              </li>
-            ))}
-          </ul>
+          <p>Dispositivo conectado: {device.name}</p>
+          <button onClick={disconnectDevice}>Desconectar Beacon</button>
         </div>
+      ) : (
+        <button onClick={connectToDevice}>+ Novo Beacon</button>
       )}
 
-      {error && (
-        <div>
-          <h2>Erro:</h2>
-          <p>{error}</p>
-        </div>
-      )}
+      <h2>Informes:</h2>
+      <div style={{ background: "#f8f8f8", padding: "10px", borderRadius: "5px", maxHeight: "200px", overflowY: "auto" }}>
+        {logMessages.map((msg, index) => (
+          <p key={index} style={{ margin: "5px 0", fontSize: "15px", fontFamily: "Poppins", color: "black" }}>{msg}</p>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from "/src/assets/logobeacon.png";
+import logo from "../../assets/logobeacon.png";
 import './Login.css';
 import './Input.css';
 
@@ -98,6 +98,9 @@ const FormLogin = () => {
               required
             />
           </div>
+
+        <a href="/beacon" style={{ color: 'red', textDecoration: 'none', textAlign: "center" }}>Beacon</a>
+
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
