@@ -3,21 +3,19 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Importa o pacote cors
+const cors = require('cors');
+const path = require('path');
 
-// Criando uma instância do express
 const app = express();
 
-// Configurando o middleware CORS
+// Configurando o middleware CORS para ambiente de desenvolvimento
 app.use(cors({
-  origin: 'http://localhost:5173', // Permita a origem do frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-  credentials: true, // Permita cookies e cabeçalhos com credenciais
+  origin: 'http://localhost:5173', // Permite a origem do frontend em modo dev (Vite)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
 }));
 
-
-
-// Usando middleware para parsear JSON
+// Middleware para parsear JSON
 app.use(express.json());
 
 // Verificando se as variáveis de ambiente estão configuradas
@@ -26,7 +24,7 @@ if (!process.env.MONGO_URI || !process.env.PORT) {
   process.exit(1);
 }
 
-// Conexão com o MongoDB usando a URL do .env
+// Conexão com o MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Conexão com o MongoDB realizada com sucesso!');
@@ -36,26 +34,19 @@ mongoose.connect(process.env.MONGO_URI)
     process.exit(1);
   });
 
-// Definindo a rota básica
-app.get('/', (req, res) => {
-  res.send('Servidor rodando e MongoDB conectado!');
+// ************* SERVINDO O FRONTEND *************
+
+// Servir os arquivos estáticos da pasta dist (build do Vite)
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Redirecionar todas as rotas que não são API para o index.html
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-// Middleware de erro global
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Algo deu errado!', error: err.message });
-});
+// ************* ROTAS DA API *************
 
-// Defina a porta onde o servidor irá rodar
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
-
-
-// Rotas de autenticação
+// Importando e usando as rotas da API
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
@@ -70,4 +61,21 @@ app.use('/api/avisos', avisosRoutes);
 
 const informeRoutes = require('./routes/informeRoutes');
 app.use('/api/informes', informeRoutes);
+
+// Rota básica para verificar se o servidor está rodando
+app.get('/api', (req, res) => {
+  res.send('Servidor rodando e MongoDB conectado!');
+});
+
+// Middleware de erro global
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Algo deu errado!', error: err.message });
+});
+
+// Iniciando o servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
 

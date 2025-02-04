@@ -6,6 +6,7 @@ export default function BeaconConect() {
   const [error, setError] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [logMessages, setLogMessages] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const receivedMessages = useRef(new Set());
 
   const jsonBufferRef = useRef("");
@@ -23,28 +24,41 @@ export default function BeaconConect() {
       return false;
     }
   };
-
   const handleChunk = (chunk) => {
     try {
-      chunk = chunk.replace(/[^\x20-\x7E]/g, "");
+      chunk = chunk.replace(/[^\x20-\x7E]/g, "");  // Remove caracteres não ASCII
       jsonBufferRef.current += chunk;
       addLogMessage(`Chunk recebido: ${chunk}`);
-
-      if (jsonBufferRef.current.includes("}")) {
-        let possibleJSON = jsonBufferRef.current;
+  
+      // Verifica se o buffer contém um array JSON completo
+      if (jsonBufferRef.current.startsWith("[") && jsonBufferRef.current.endsWith("}]")) {
+        const possibleJSON = jsonBufferRef.current;
+  
         if (isValidJSON(possibleJSON)) {
-          const parsedData = JSON.parse(possibleJSON);
-
-          if (parsedData._id && receivedMessages.current.has(parsedData._id)) {
-            addLogMessage("Mensagem repetida detectada, ignorando...");
-            return;
-          }
-
-          if (parsedData._id) {
-            receivedMessages.current.add(parsedData._id);
-          }
-
-          setDataList((prevList) => [...prevList, parsedData]);
+          const parsedDataArray = JSON.parse(possibleJSON);  // Converte o array completo
+          
+          parsedDataArray.forEach((parsedData) => {
+            if (parsedData._id && receivedMessages.current.has(parsedData._id)) {
+              addLogMessage("Mensagem repetida detectada, desconectando...");
+              disconnectDevice();
+              return;
+            }
+  
+            if (parsedData._id) {
+              receivedMessages.current.add(parsedData._id);
+            }
+  
+            setDataList((prevList) => [
+              ...prevList,
+              {
+                nome: parsedData.nome || "Desconhecido",
+                dia: parsedData.dia || "N/A",
+                descricao: parsedData.descricao || "Sem descrição",
+              },
+            ]);
+          });
+  
+          // Limpa o buffer após processar o JSON completo
           jsonBufferRef.current = "";
         }
       }
@@ -53,6 +67,7 @@ export default function BeaconConect() {
       addLogMessage(`Erro ao processar chunk: ${chunk} - ${e.message}`);
     }
   };
+  
 
   const connectToDevice = async () => {
     try {
@@ -65,10 +80,9 @@ export default function BeaconConect() {
       addLogMessage(`Dispositivo selecionado: ${bleDevice.name}`);
       setDevice(bleDevice);
 
-      bleDevice.addEventListener("gattserverdisconnected", async () => {
-        addLogMessage("Dispositivo desconectado, tentando reconectar...");
+      bleDevice.addEventListener("gattserverdisconnected", () => {
+        addLogMessage("Dispositivo desconectado.");
         setIsConnected(false);
-        await reconnectDevice(bleDevice);
       });
 
       await establishConnection(bleDevice);
@@ -85,7 +99,6 @@ export default function BeaconConect() {
         await bleDevice.gatt.connect();
       }
 
-      // Verificação adicional do estado de conexão
       if (!bleDevice.gatt.connected) {
         throw new Error("O GATT Server ainda está desconectado após tentativa de conexão.");
       }
@@ -116,32 +129,6 @@ export default function BeaconConect() {
         addLogMessage("Desconectando e tentando novamente...");
         bleDevice.gatt.disconnect();
       }
-
-      await reconnectDevice(bleDevice);
-    }
-  };
-
-  const reconnectDevice = async (bleDevice) => {
-    let attempts = 0;
-    const maxAttempts = 5;
-
-    while (attempts < maxAttempts && !bleDevice.gatt.connected) {
-      try {
-        addLogMessage(`Tentando reconectar... (Tentativa ${attempts + 1})`);
-        await new Promise((resolve) => setTimeout(resolve, 5000)); // Aumentando o tempo de espera para 5 segundos
-        await establishConnection(bleDevice);
-        if (bleDevice.gatt.connected) {
-          addLogMessage("Reconectado com sucesso!");
-          break;
-        }
-      } catch (e) {
-        addLogMessage(`Falha na tentativa ${attempts + 1}: ${e.message}`);
-      }
-      attempts++;
-    }
-
-    if (attempts === maxAttempts) {
-      addLogMessage("Falha ao reconectar após várias tentativas. Reconecte manualmente.");
     }
   };
 
@@ -150,33 +137,58 @@ export default function BeaconConect() {
       device.gatt.disconnect();
       addLogMessage("Dispositivo desconectado manualmente.");
     }
+    jsonBufferRef.current = ""; // Limpa o buffer ao desconectar
     setDevice(null);
     setIsConnected(false);
   };
 
+  const clearLogs = () => {
+    setLogMessages([]);
+  };
+
+  const filteredData = dataList.filter((item) =>
+    item.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div>
-      <h2 style={{textAlign: "left"}}>Olá,</h2>
-      <h1 style={{ fontSize: '24px' }}>
-         Como posso te ajudar?{' '}
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h2 style={{ fontSize: '20px', textAlign: 'left' }}>Olá,</h2>
+      <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '20px' }}>
+        Como posso te ajudar?{' '}
         <span style={{ color: 'red', fontWeight: '300' }}>Veja os seus Beacons!</span>
       </h1>
 
-      {isConnected ? (
-        <div>
-          <p>Dispositivo conectado: {device.name}</p>
-          <button onClick={disconnectDevice}>Desconectar Beacon</button>
-        </div>
-      ) : (
-        <button onClick={connectToDevice}>+ Novo Beacon</button>
-      )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        {isConnected ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ color: 'green', fontWeight: 'bold' }}>Dispositivo conectado: {device.name}</span>
+            <button onClick={disconnectDevice} style={{ backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Desconectar Beacon</button>
+          </div>
+        ) : (
+          <button onClick={connectToDevice} style={{ backgroundColor: 'blue', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>+ Novo Beacon</button>
+        )}
+      </div>
 
-      <h2>Informes:</h2>
-      <div style={{ background: "#f8f8f8", padding: "10px", borderRadius: "5px", maxHeight: "200px", overflowY: "auto" }}>
-        {logMessages.map((msg, index) => (
-          <p key={index} style={{ margin: "5px 0", fontSize: "15px", fontFamily: "Poppins", color: "black" }}>{msg}</p>
+      <h2 style={{ fontSize: '22px', fontWeight: '600', marginBottom: '10px' }}>Dados Recebidos:</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+        {filteredData.map((data, index) => (
+          <div key={index} style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', padding: '15px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>{data.nome}</h3>
+            <p><strong>Dia:</strong> {data.dia}</p>
+            <p><strong>Descrição:</strong> {data.descricao}</p>
+          </div>
         ))}
       </div>
+
+      <h2 style={{ fontSize: '22px', fontWeight: '600', marginTop: '30px' }}>Informes:</h2>
+      <div style={{ backgroundColor: '#f0f0f0', padding: '15px', borderRadius: '10px', maxHeight: '200px', overflowY: 'auto' }}>
+        {logMessages.map((msg, index) => (
+          <p key={index} style={{ fontSize: '14px', fontFamily: 'monospace', color: 'black', marginBottom: '5px' }}>{msg}</p>
+        ))}
+      </div>
+      <button onClick={clearLogs} style={{ marginTop: '20px', backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Limpar Logs</button>
+
+      {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
     </div>
   );
 }
