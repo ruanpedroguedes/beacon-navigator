@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import InformeComponent from "../btnInformes/btnInformes";
 
 export default function BeaconConect() {
   const [device, setDevice] = useState(null);
@@ -165,7 +166,7 @@ export default function BeaconConect() {
             <button onClick={disconnectDevice} style={{ backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Desconectar Beacon</button>
           </div>
         ) : (
-          <button onClick={connectToDevice} style={{ backgroundColor: 'blue', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>+ Novo Beacon</button>
+          <button onClick={connectToDevice} style={{ backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>+ Novo Beacon</button>
         )}
       </div>
 
@@ -187,7 +188,7 @@ export default function BeaconConect() {
         ))}
       </div>
       <button onClick={clearLogs} style={{ marginTop: '20px', backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Limpar Logs</button>
-
+      <InformeComponent />
       {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
     </div>
   );
