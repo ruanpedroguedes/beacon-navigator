@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import InformeComponent from "../btnInformes/btnInformes";
+import { useNavigate } from "react-router-dom";
 
 export default function BeaconConect() {
+  const navigate = useNavigate(); // ADICIONE ESTA LINHA
   const [device, setDevice] = useState(null);
   const [dataList, setDataList] = useState([]);
   const [error, setError] = useState(null);
@@ -188,7 +189,22 @@ export default function BeaconConect() {
         ))}
       </div>
       <button onClick={clearLogs} style={{ marginTop: '20px', backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Limpar Logs</button>
-      <InformeComponent />
+      
+      <button
+          onClick={() => navigate("/informesBeacon")}
+          style={{
+            backgroundColor: "green",
+            color: "white",
+            padding: "17px 17px", // Botão menor
+            fontSize: "14px", // Fonte menor
+            border: "none",
+            borderRadius: "5px",
+            minWidth: "100px", // Largura mínima reduzida
+            marginLeft: "20px"
+          }}
+        >
+          informes
+        </button>
       {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
     </div>
   );

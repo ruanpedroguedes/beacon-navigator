@@ -6,7 +6,7 @@
 }
 
 .load-button {
-  background-color: #007bff;
+  background-color:red;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -17,7 +17,7 @@
 }
 
 .load-button:hover {
-  background-color: #0056b3;
+  background-color: rgba(172, 255, 47, 0.763);
 }
 
 .informes-list {
